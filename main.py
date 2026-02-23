@@ -160,12 +160,13 @@ class KlippekGUI(QMainWindow):
 
         root_layout.addLayout(top_row)
 
-        # ── Main content box (rounded, dark grey) ─────────────────────
+        # ── Main content box (rounded, greyed-out panel) ──────────────
         content_box = QFrame()
+        content_box.setObjectName("contentBox")
         content_box.setStyleSheet("""
-            QFrame {
-                background-color: #1f2f2f;
-                border: 1px solid #2a3f3f;
+            QFrame#contentBox {
+                background-color: #2a3a3a;
+                border: 2px solid #3a4f4f;
                 border-radius: 18px;
             }
         """)
