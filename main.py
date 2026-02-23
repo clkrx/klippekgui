@@ -102,6 +102,11 @@ class KlippekGUI(QMainWindow):
         top_row.addWidget(nav_container)
         top_row.addStretch()
 
+        # Right column: clock on top, window controls below
+        right_col = QVBoxLayout()
+        right_col.setContentsMargins(0, 0, 0, 0)
+        right_col.setSpacing(4)
+
         # Clock / date label (top-right, orange-gold)
         self.datetime_label = QLabel()
         self.datetime_label.setStyleSheet(f"""
@@ -112,27 +117,12 @@ class KlippekGUI(QMainWindow):
             background-color: transparent;
         """)
         self.datetime_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        top_row.addWidget(self.datetime_label)
+        right_col.addWidget(self.datetime_label)
 
-        root_layout.addLayout(top_row)
-
-        # ── Purple accent label ─────────────────────────────────────────
-        accent_label = QLabel("✦ Main Window")
-        accent_label.setStyleSheet(f"""
-            color: #9b59b6;
-            font-size: 14px;
-            font-weight: bold;
-            font-family: '{self.custom_font_family}', 'Segoe UI', Arial, sans-serif;
-            padding-left: 6px;
-            background-color: transparent;
-        """)
-        root_layout.addWidget(accent_label)
-
-        # Fill remaining space (content area placeholder)
-        root_layout.addStretch()
-
-        # ── Close / minimize bar (bottom-right, since frameless) ───────
+        # Window controls right below the clock
         controls_row = QHBoxLayout()
+        controls_row.setContentsMargins(0, 0, 0, 0)
+        controls_row.setSpacing(4)
         controls_row.addStretch()
 
         ctrl_btn_style = f"""
@@ -141,7 +131,7 @@ class KlippekGUI(QMainWindow):
                 color: #aaaaaa;
                 border: 1px solid #2a3f3f;
                 border-radius: 8px;
-                padding: 6px 18px;
+                padding: 4px 14px;
                 font-size: 13px;
                 font-family: '{self.custom_font_family}', 'Segoe UI', Arial, sans-serif;
             }}
@@ -152,20 +142,34 @@ class KlippekGUI(QMainWindow):
         """
 
         minimize_btn = QPushButton("—")
-        minimize_btn.setFixedSize(44, 32)
+        minimize_btn.setFixedSize(38, 26)
         minimize_btn.setStyleSheet(ctrl_btn_style)
         minimize_btn.setCursor(Qt.PointingHandCursor)
         minimize_btn.clicked.connect(self.showMinimized)
         controls_row.addWidget(minimize_btn)
 
         close_btn = QPushButton("✕")
-        close_btn.setFixedSize(44, 32)
+        close_btn.setFixedSize(38, 26)
         close_btn.setStyleSheet(ctrl_btn_style.replace("#1e3838", "#5c2020"))
         close_btn.setCursor(Qt.PointingHandCursor)
         close_btn.clicked.connect(self.close)
         controls_row.addWidget(close_btn)
 
-        root_layout.addLayout(controls_row)
+        right_col.addLayout(controls_row)
+        top_row.addLayout(right_col)
+
+        root_layout.addLayout(top_row)
+
+        # ── Main content box (rounded, dark grey) ─────────────────────
+        content_box = QFrame()
+        content_box.setStyleSheet("""
+            QFrame {
+                background-color: #1f2f2f;
+                border: 1px solid #2a3f3f;
+                border-radius: 18px;
+            }
+        """)
+        root_layout.addWidget(content_box, 1)
 
         # ── Timer for live clock ────────────────────────────────────────
         self.update_datetime()
